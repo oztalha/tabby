@@ -305,7 +305,7 @@ const SourceCodeBrowserRenderer: React.FC<SourceCodeBrowserProps> = ({
       <ResizablePanel defaultSize={20} minSize={20}>
         <FileTreePanel />
       </ResizablePanel>
-      <ResizableHandle className="w-1 hover:bg-card active:bg-card" />
+      <ResizableHandle className="w-1 bg-border/40 hover:bg-border active:bg-border" />
       <ResizablePanel defaultSize={80} minSize={30}>
         <div className="flex h-full flex-col overflow-y-auto px-4 pb-4">
           <FileDirectoryBreadcrumb className="py-4" />
