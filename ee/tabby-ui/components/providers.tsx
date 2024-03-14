@@ -8,6 +8,7 @@ import { Provider as UrqlProvider } from 'urql'
 import { AuthProvider, useAuthenticatedSession } from '@/lib/tabby/auth'
 import { client } from '@/lib/tabby/gql'
 import { TooltipProvider } from '@/components/ui/tooltip'
+import { TopbarProgressProvider } from './topbar-progress-indicator'
 
 export function Providers({ children, ...props }: ThemeProviderProps) {
   return (
@@ -15,8 +16,10 @@ export function Providers({ children, ...props }: ThemeProviderProps) {
       <UrqlProvider value={client}>
         <TooltipProvider>
           <AuthProvider>
-            <EnsureSignin />
-            {children}
+            <TopbarProgressProvider>
+              <EnsureSignin />
+              {children}
+            </TopbarProgressProvider>
           </AuthProvider>
         </TooltipProvider>
       </UrqlProvider>

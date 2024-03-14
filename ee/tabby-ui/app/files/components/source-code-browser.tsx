@@ -28,6 +28,7 @@ import {
   resolveFileNameFromPath,
   resolveRepoNameFromPath
 } from './utils'
+import { useTopbarProgress } from '@/components/topbar-progress-indicator'
 
 /**
  * FileMap example
@@ -165,6 +166,8 @@ const SourceCodeBrowserRenderer: React.FC<SourceCodeBrowserProps> = ({
     setInitialized,
     setExpandedKeys
   } = React.useContext(SourceCodeBrowserContext)
+  const loadingRawFileRef = React.useRef(false)
+  const { progress, setProgress } = useTopbarProgress()
 
   const activeRepoName = React.useMemo(() => {
     return resolveRepoNameFromPath(activePath)
@@ -188,7 +191,7 @@ const SourceCodeBrowserRenderer: React.FC<SourceCodeBrowserProps> = ({
   }, [activePath, fileMap, initialized])
 
   // fetch raw file
-  const { data: rawFileResponse } = useSWRImmutable<{
+  const { data: rawFileResponse, isLoading } = useSWRImmutable<{
     blob?: Blob
     contentLength?: number
   }>(
@@ -213,6 +216,19 @@ const SourceCodeBrowserRenderer: React.FC<SourceCodeBrowserProps> = ({
       keepPreviousData: true
     }
   )
+
+  React.useEffect(() => {
+    
+  }, [activePath])
+
+  React.useEffect(() => {
+    loadingRawFileRef.current = isLoading
+    if (isLoading) {
+      setProgress(true)
+    } else {
+      setProgress(false)
+    }
+  }, [isLoading])
 
   const fileBlob = rawFileResponse?.blob
   const contentLength = rawFileResponse?.contentLength
