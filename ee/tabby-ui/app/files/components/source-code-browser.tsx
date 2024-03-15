@@ -84,9 +84,9 @@ const SourceCodeBrowserContextProvider: React.FC<PropsWithChildren> = ({
 
   const setActivePath = (path: string | undefined) => {
     if (!path) {
-      updateSearchParams({ del: 'path' })
+      updateSearchParams({ del: ['path', 'plain'] })
     } else {
-      updateSearchParams({ set: { path } })
+      updateSearchParams({ set: { path }, del: 'plain' })
     }
   }
 
