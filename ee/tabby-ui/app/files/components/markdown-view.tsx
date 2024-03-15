@@ -1,7 +1,7 @@
 import React from 'react'
+import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 import remarkMath from 'remark-math'
-import rehypeRaw from 'rehype-raw'
 
 import { MemoizedReactMarkdown } from '@/components/markdown'
 
@@ -11,9 +11,9 @@ interface MarkdownViewProps {
 
 const MarkdownView: React.FC<MarkdownViewProps> = ({ value }) => {
   return (
-    <div className='py-4 px-10'>
+    <div className="px-10 py-4">
       <MemoizedReactMarkdown
-        className="prose break-words dark:prose-invert prose-p:leading-relaxed prose-img:max-w-full prose-a:text-primary prose-h1:border-b prose-h1:pb-2 prose-h2:border-b prose-h2:pb-2 prose-full-width prose-img:w-auto"
+        className="prose-full-width prose break-words dark:prose-invert prose-h1:border-b prose-h1:pb-2 prose-h2:border-b prose-h2:pb-2 prose-p:leading-relaxed prose-a:text-primary prose-img:w-auto prose-img:max-w-full"
         remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeRaw]}
       >

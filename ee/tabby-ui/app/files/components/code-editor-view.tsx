@@ -4,11 +4,10 @@ import { EditorView } from '@codemirror/view'
 import { useTheme } from 'next-themes'
 
 import { TFileMeta } from '@/lib/types'
+import CodeEditor from '@/components/codemirror/codemirror'
 import { markTagNameExtension } from '@/components/codemirror/name-tag-extension'
 import { highlightTagExtension } from '@/components/codemirror/tag-range-highlight-extension'
 import { codeTagHoverTooltip } from '@/components/codemirror/tooltip-extesion'
-import CodeEditor from '@/components/codemirror/codemirror'
-
 
 interface CodeEditorViewProps {
   value: string
@@ -50,13 +49,13 @@ const CodeEditorView: React.FC<CodeEditorViewProps> = ({
   }, [value, tags])
 
   return (
-      <CodeEditor
-        value={value}
-        theme={theme}
-        language={language}
-        readonly
-        extensions={extensions}
-      />
+    <CodeEditor
+      value={value}
+      theme={theme}
+      language={language}
+      readonly
+      extensions={extensions}
+    />
   )
 }
 

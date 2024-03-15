@@ -4,11 +4,11 @@ import filename2prism from 'filename2prism'
 import useRouterStuff from '@/lib/hooks/use-router-stuff'
 import { TFileMeta } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ListSkeleton } from '@/components/skeleton'
 
 import { BlobHeader } from './blob-header'
 import { SourceCodeBrowserContext } from './source-code-browser'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ListSkeleton } from '@/components/skeleton'
 
 const CodeEditorView = React.lazy(() => import('./code-editor-view'))
 const MarkdownView = React.lazy(() => import('./markdown-view'))
@@ -70,14 +70,13 @@ export const TextFileView: React.FC<TextFileViewProps> = ({
     <div className={cn(className)}>
       <BlobHeader blob={blob} contentLength={contentLength} canCopy>
         {isMarkdown && (
-          <Tabs value={isPlain ? '1' : '0'} onValueChange={onToggleMarkdownView}>
+          <Tabs
+            value={isPlain ? '1' : '0'}
+            onValueChange={onToggleMarkdownView}
+          >
             <TabsList>
-              <TabsTrigger value='0'>
-                Preview
-              </TabsTrigger>
-              <TabsTrigger value='1'>
-                Code
-              </TabsTrigger>
+              <TabsTrigger value="0">Preview</TabsTrigger>
+              <TabsTrigger value="1">Code</TabsTrigger>
             </TabsList>
           </Tabs>
         )}
