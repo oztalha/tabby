@@ -1,16 +1,14 @@
-import React, { useContext } from 'react'
-import dynamic from 'next/dynamic'
+import React, { Suspense, useContext } from 'react'
 import filename2prism from 'filename2prism'
 
 import { TFileMeta } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import { ListSkeleton } from '@/components/skeleton'
 
 import { BlobHeader } from './blob-header'
 import { SourceCodeBrowserContext } from './source-code-browser'
 
-const SourceCodeEditor = dynamic(() => import('./source-code-editor'), {
-  ssr: false
-})
+const SourceCodeEditor = React.lazy(() => import('./source-code-editor'))
 
 interface TextFileViewProps extends React.HTMLProps<HTMLDivElement> {
   blob: Blob | undefined
@@ -54,7 +52,9 @@ export const TextFileView: React.FC<TextFileViewProps> = ({
         canCopy
       ></BlobHeader>
       <div className="rounded-b-lg border border-t-0 p-2">
-        <SourceCodeEditor value={value} meta={meta} language={language} />
+        <Suspense fallback={<ListSkeleton />}>
+          <SourceCodeEditor value={value} meta={meta} language={language} />
+        </Suspense>
       </div>
     </div>
   )

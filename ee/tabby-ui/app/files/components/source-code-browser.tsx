@@ -3,6 +3,7 @@
 import React, { PropsWithChildren } from 'react'
 import filename2prism from 'filename2prism'
 import { compact, findIndex, toNumber } from 'lodash-es'
+import { toast } from 'sonner'
 import { SWRResponse } from 'swr'
 import useSWRImmutable from 'swr/immutable'
 
@@ -15,6 +16,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup
 } from '@/components/ui/resizable'
+import { useTopbarProgress } from '@/components/topbar-progress-indicator'
 
 import { FileDirectoryBreadcrumb } from './file-directory-breadcrumb'
 import { DirectoryView } from './file-directory-view'
@@ -28,7 +30,6 @@ import {
   resolveFileNameFromPath,
   resolveRepoNameFromPath
 } from './utils'
-import { useTopbarProgress } from '@/components/topbar-progress-indicator'
 
 /**
  * FileMap example
@@ -191,44 +192,48 @@ const SourceCodeBrowserRenderer: React.FC<SourceCodeBrowserProps> = ({
   }, [activePath, fileMap, initialized])
 
   // fetch raw file
-  const { data: rawFileResponse, isLoading } = useSWRImmutable<{
-    blob?: Blob
-    contentLength?: number
-  }>(
-    isFileSelected
-      ? `/repositories/${activeRepoName}/resolve/${activeBasename}`
-      : null,
-    (url: string) =>
-      fetcher(url, {
-        responseFormatter: async response => {
-          if (!response.ok) return undefined
+  const { data: rawFileResponse, isLoading: isRawFileLoading } =
+    useSWRImmutable<{
+      blob?: Blob
+      contentLength?: number
+    }>(
+      isFileSelected
+        ? `/repositories/${activeRepoName}/resolve/${activeBasename}`
+        : null,
+      (url: string) =>
+        fetcher(url, {
+          responseFormatter: async response => {
+            if (!response.ok) return undefined
 
-          const contentLength = toNumber(response.headers.get('Content-Length'))
-          // todo abort big size request and truncate
-          const blob = await response.blob()
-          return {
-            contentLength,
-            blob
+            const contentLength = toNumber(
+              response.headers.get('Content-Length')
+            )
+            // todo abort big size request and truncate
+            const blob = await response.blob()
+            return {
+              contentLength,
+              blob
+            }
           }
+        }),
+      {
+        keepPreviousData: true,
+        onError(err) {
+          toast.error('Fail to fetch')
         }
-      }),
-    {
-      keepPreviousData: true
-    }
-  )
+      }
+    )
+
+  React.useEffect(() => {}, [activePath])
 
   React.useEffect(() => {
-    
-  }, [activePath])
-
-  React.useEffect(() => {
-    loadingRawFileRef.current = isLoading
-    if (isLoading) {
+    loadingRawFileRef.current = isRawFileLoading
+    if (isRawFileLoading) {
       setProgress(true)
     } else {
       setProgress(false)
     }
-  }, [isLoading])
+  }, [isRawFileLoading])
 
   const fileBlob = rawFileResponse?.blob
   const contentLength = rawFileResponse?.contentLength
