@@ -167,7 +167,6 @@ const SourceCodeBrowserRenderer: React.FC<SourceCodeBrowserProps> = ({
     setInitialized,
     setExpandedKeys
   } = React.useContext(SourceCodeBrowserContext)
-  const loadingRawFileRef = React.useRef(false)
   const { progress, setProgress } = useTopbarProgress()
 
   const activeRepoName = React.useMemo(() => {
@@ -227,7 +226,6 @@ const SourceCodeBrowserRenderer: React.FC<SourceCodeBrowserProps> = ({
   React.useEffect(() => {}, [activePath])
 
   React.useEffect(() => {
-    loadingRawFileRef.current = isRawFileLoading
     if (isRawFileLoading) {
       setProgress(true)
     } else {

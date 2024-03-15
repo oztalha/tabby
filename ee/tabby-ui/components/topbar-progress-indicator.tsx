@@ -27,8 +27,7 @@ const TopbarProgressProvider: React.FC<TopbarProgressProviderProps> = ({
       barColors: {
         0: theme === 'dark' ? '#DC981A' : '#B7942B'
         // 0: '#2563eb'
-      },
-      shadowBlur: 5
+      }
     })
   }, [])
 
